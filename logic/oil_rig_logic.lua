@@ -3,6 +3,12 @@ local math2d = require("math2d")
 
 local pole_offset = {0,0.1}
 
+function UnlockOilProcessing(force)
+  if force.technologies["oil-processing"] then
+    force.technologies["oil-processing"].researched = true
+  end
+end
+
 function CreateOilRig(entity, player, robot)
   local surface = entity.surface
   local force = entity.force
@@ -72,6 +78,8 @@ function CreateOilRig(entity, player, robot)
     }
   storage.oil_rigs[entity.unit_number] = entry
   script.register_on_object_destroyed(entity)
+
+  UnlockOilProcessing(force)
   return entry
 end
 

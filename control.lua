@@ -512,8 +512,13 @@ local function init()
       or settings.global["waterway_reach_increase"].value
   storage.current_distance_bonus = settings.global["waterway_reach_increase"].value
 
-  -- Reapply long reach settings to existing characters
-  
+  -- Enable oil-processing tech on migration from v1.0.12
+  for _, oil_rig in pairs(storage.oil_rigs) do
+    if oil_rig.entity and oil_rig.entity.valid then
+      UnlockOilProcessing(oil_rig.entity.force)
+    end
+  end
+
   -- Enable offshore oil generation if it has been added to a save
   oil_generation_migration()
 
