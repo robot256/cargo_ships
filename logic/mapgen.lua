@@ -1,6 +1,7 @@
 
 -- Enable offshore oil generation if it has been added to a save
 function oil_generation_migration()
+  if not prototypes.entity["offshore-oil"] then return end
   local map_gen_settings = game.planets.nauvis.surface.map_gen_settings
   if map_gen_settings.autoplace_settings.entity.settings["offshore-oil"] == nil then
     map_gen_settings.autoplace_controls["offshore-oil"] = {}
@@ -41,6 +42,10 @@ commands.add_command("cargo-ships-get-oil-settings", "Get oil settings\n" .. usa
     game.print("Planet " .. planet.name .. " has not been generated yet")
     return
   end
+  if not prototypes.entity["offshore-oil"] then
+    game.print("Offshore oil has been disabled in mod settings")
+    -- Don't return as may still want to see crude-oil settings
+  end
   local crude_control_name = "crude-oil"
   local offshore_control_name = "offshore-oil"
   if planet.name == "aquilo" then
@@ -79,9 +84,26 @@ commands.add_command("cargo-ships-set-oil-settings", "Set oil configuration\n" .
     game.print("Planet " .. planet_name .. " has not been generated yet")
     return
   end
-  local control_name = "offshore-oil"
-  if planet_name == "aquilo" then
-    control_name = "aquilo_offshore_oil"
+
+  if resource_name == "offshore-oil" and not prototypes.entity["offshore-oil"] then
+    game.print("Offshore oil has been disabled in mod settings")
+    return
+  end
+
+  local control_name
+  if resource_name == "crude-oil" then
+    control_name = "crude-oil"
+    if planet_name == "aquilo" then
+      control_name = "aquilo_crude_oil"
+    end
+  elseif resource_name == "offshore-oil" then
+    control_name = "offshore-oil"
+    if planet_name == "aquilo" then
+      control_name = "aquilo_offshore_oil"
+    end
+  else
+    game.print("Unknown resource name: " .. resource_name)
+    return
   end
   local map_gen_settings = planet.surface.map_gen_settings
 
