@@ -112,7 +112,7 @@ local story_table =
     },
     {
       condition = function()
-        local target = game.simulation.get_widget_position({type = "quickbar-slot", data = "cargo_ship"})
+        local target = game.simulation.get_widget_position({type = "quickbar-slot", filter = {name = "cargo_ship", quality = "normal"}})
         ---@cast target -?
         return game.simulation.move_cursor({position = target})
       end
@@ -139,7 +139,7 @@ local story_table =
     },
     {
       condition = function()
-        local target = game.simulation.get_widget_position({type = "quickbar-slot", data = fuel.name})
+        local target = game.simulation.get_widget_position({type = "quickbar-slot", filter = {name = fuel.name, quality = "normal"}})
         ---@cast target -?
         return game.simulation.move_cursor({position = target})
       end

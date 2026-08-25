@@ -6,7 +6,7 @@
   "description": "Adds boats, cargo ships, and oil tankers that travel on water rails.",
   "factorio_version": "2.1",
   "dependencies": [
-    "base",
+    "base >= 2.1.15",
     "cargo-ships-graphics",
 	"Robot256Lib",
     "+ cargo-ships-floating-electric-pole",

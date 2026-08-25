@@ -88,7 +88,7 @@ local story_table =
     },
     {
       condition = function()
-        local target = game.simulation.get_widget_position({type = "quickbar-slot", data = pump})
+        local target = game.simulation.get_widget_position({type = "quickbar-slot", filter = {name = pump, quality = "normal"}})
         ---@cast target -?
         return game.simulation.move_cursor({position = target})
       end
