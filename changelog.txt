@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.7
+Date: 2026-08-24
+  Bugfixes:
+    - Fixed Tips and Tricks for Factorio 2.1.16 API update (thanks to Jurgyy).
+---------------------------------------------------------------------------------------------------
 Version: 2.1.6
 Date: 2026-07-18
   Bugfixes:
@@ -7,7 +12,7 @@ Date: 2026-07-18
 Version: 2.1.5
 Date: 2026-07-12
   Features:
-    - New Tips and Tricks simulations thanks to Jurgy.
+    - New Tips and Tricks simulations thanks to Jurgyy.
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.4
 Date: 2026-06-30
