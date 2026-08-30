@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.8
+Date: 2026-08-29
+  Bugfixes:
+    - Fixed stack overflow crash in rolling stock connection logic (for example when mining railed boats that are close together).
+---------------------------------------------------------------------------------------------------
 Version: 2.1.7
 Date: 2026-08-24
   Bugfixes:

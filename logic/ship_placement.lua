@@ -298,15 +298,28 @@ function OnTrainCreated(event)
   if contains_ship_engine == false then
     return
   end
-  --game.print("Checking train "..tostring(event.train.id).." with ship engine in it")
+  --log("Checking train "..tostring(event.train.id).." with carriages "..serpent.line(parts))
   -- if ship  has been split reconnect
   if #parts == 1 then
     -- reconnect!
     local engine = parts[1]
-    -- Connect engine in the direction of the expected ship body
-    local connected = engine.connect_rolling_stock(storage.ship_engines[engine.name].coupled_ship)
-    log("Tried connecting lonely "..engine.name.." at "..util.positiontostr(engine.position)..", result: "..tostring(connected))
-
+    local engine_name = engine.name
+    local engine_position = engine.position
+    local engine_unit_number = engine.unit_number
+    
+    if storage.connection_attempts and storage.connection_attempts[engine.unit_number] and storage.connection_attempts[engine.unit_number] >= game.tick then
+      --log("Skipping lonely "..engine_name.."["..tostring(engine_unit_number).."] because we already tried connecting it once this tick.")
+      storage.connection_attempts[engine.unit_number] = nil
+    else
+      -- Connect engine in the direction of the expected ship body
+      log("Trying to connect lonely "..engine_name.."["..tostring(engine_unit_number).."] at "..util.positiontostr(engine_position).." in direction "..(storage.ship_engines[engine_name].coupled_ship==defines.rail_direction.front and "front" or "back"))
+      storage.connection_attempts = storage.connection_attempts or {}
+      storage.connection_attempts[engine.unit_number] = game.tick  -- Have to add it *before* actually coupling so it can be read by the triggered events.
+      local connected = engine.connect_rolling_stock(storage.ship_engines[engine_name].coupled_ship)
+      --log("Tried connecting lonely "..engine_name.."["..tostring(engine_unit_number).."] at "..util.positiontostr(engine_position)..", result: "..tostring(connected))
+      
+    end
+    
   -- else if ship has been overconnected, split again
   elseif #parts > 2 then
     for i = 1, #parts do
@@ -316,11 +329,11 @@ function OnTrainCreated(event)
       if right_direction ~= nil then
         -- This is a ship or engine that is supposed to connected in right_direction
         -- Check if it's also connected in the wrong_direction
-        local wrong_direction = right_direction == defines.rail_direction.front and defines.rail_direction.back or defines.rail_direction.front
+        local wrong_direction = ((right_direction == defines.rail_direction.front) and defines.rail_direction.back) or defines.rail_direction.front
         local stock = parts[i]
         if stock.get_connected_rolling_stock(wrong_direction) then
-          --game.print("Cargo ships disconnecting rolling stock from "..(wrong_direction==defines.rail_direction.front and "front" or "back").." of "..name.." #"..tostring(stock.unit_number))
-          if stock.disconnect_rolling_stock(wrong_direction) then 
+          log("Disconnecting mismatched rolling stock from "..(wrong_direction==defines.rail_direction.front and "front" or "back").." of "..name.."["..tostring(stock.unit_number).."]")
+          if stock.disconnect_rolling_stock(wrong_direction) then
             break
           end
         end
