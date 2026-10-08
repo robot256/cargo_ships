@@ -201,7 +201,7 @@ function processPlacementQueue()
               if engine and engine.valid and not engine.to_be_deconstructed() then
                 log("Check Placement ordering deconstruction of "..tostring(engine))
                 -- Unfortunately, there is no way to add deconstruction orders or mine_entity commands to the undo stack.
-                engine.order_deconstruction(player and player.force or ship.force, player, 1)
+                engine.order_deconstruction(player and player.force or entity.force, player, 1)
               end
             end
           end
