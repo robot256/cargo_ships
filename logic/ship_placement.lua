@@ -45,7 +45,7 @@ local function hasCorrectConnectedStock(wagon)
       end
     end
   end
-  log("didn't find matching entity for "..wagon.name.." in train of "..#train.carriages.." wagons")
+  --log("didn't find matching entity for "..wagon.name.." in train of "..#train.carriages.." wagons")
   return false
 end
 
@@ -74,7 +74,7 @@ local function cancelPlacement(entity, player, robot)
       game.print{"cargo-ship-message.error-canceled", entity.localised_name}
     end
   end
-  log("cancelPlacement destroying "..tostring(entity))
+  --log("cancelPlacement destroying "..tostring(entity))
   entity.destroy()
 end
 
@@ -199,9 +199,9 @@ function processPlacementQueue()
               -- Ship is marked, make sure the engine is also marked
               engine = entity.get_connected_rolling_stock(ship_data.coupled_engine)
               if engine and engine.valid and not engine.to_be_deconstructed() then
-                log("Check Placement ordering deconstruction of "..tostring(engine))
-                -- Unfortunately, there is no way to add deconstruction orders or mine_entity commands to the undo stack.
-                engine.order_deconstruction(player and player.force or ship.force, player, 1)
+                --log("Check Placement ordering deconstruction of "..tostring(engine))
+                -- Add ship engine to same undo stack item
+                engine.order_deconstruction(player and player.force or entity.force, player, player and 1)
               end
             end
           end
@@ -258,7 +258,7 @@ function processPlacementQueue()
           -- This engine is marked for deconstruction, make sure the attached ship is also
           local ship = entity.get_connected_rolling_stock(storage.ship_engines[entity.name].coupled_ship)
           if not ship.to_be_deconstructed() then
-            log("Check Placement ordering deconstruction of "..tostring(ship))
+            --log("Check Placement ordering deconstruction of "..tostring(ship))
             ship.order_deconstruction(player and player.force or ship.force, player, 1)
           end
         end
@@ -312,7 +312,7 @@ function OnTrainCreated(event)
       storage.connection_attempts[engine.unit_number] = nil
     else
       -- Connect engine in the direction of the expected ship body
-      log("Trying to connect lonely "..engine_name.."["..tostring(engine_unit_number).."] at "..util.positiontostr(engine_position).." in direction "..(storage.ship_engines[engine_name].coupled_ship==defines.rail_direction.front and "front" or "back"))
+      --log("Trying to connect lonely "..engine_name.."["..tostring(engine_unit_number).."] at "..util.positiontostr(engine_position).." in direction "..(storage.ship_engines[engine_name].coupled_ship==defines.rail_direction.front and "front" or "back"))
       storage.connection_attempts = storage.connection_attempts or {}
       storage.connection_attempts[engine.unit_number] = game.tick  -- Have to add it *before* actually coupling so it can be read by the triggered events.
       local connected = engine.connect_rolling_stock(storage.ship_engines[engine_name].coupled_ship)
@@ -332,7 +332,7 @@ function OnTrainCreated(event)
         local wrong_direction = ((right_direction == defines.rail_direction.front) and defines.rail_direction.back) or defines.rail_direction.front
         local stock = parts[i]
         if stock.get_connected_rolling_stock(wrong_direction) then
-          log("Disconnecting mismatched rolling stock from "..(wrong_direction==defines.rail_direction.front and "front" or "back").." of "..name.."["..tostring(stock.unit_number).."]")
+          --log("Disconnecting mismatched rolling stock from "..(wrong_direction==defines.rail_direction.front and "front" or "back").." of "..name.."["..tostring(stock.unit_number).."]")
           if stock.disconnect_rolling_stock(wrong_direction) then
             break
           end
@@ -351,7 +351,7 @@ function DestroyShipGhost(ghost)
     radius = 1
   }
   for _,engine_ghost in pairs(engine_ghosts) do
-    log("Destroying engine ghost "..tostring(engine_ghost))
+    --log("Destroying engine ghost "..tostring(engine_ghost))
     engine_ghost.destroy()
   end
 
