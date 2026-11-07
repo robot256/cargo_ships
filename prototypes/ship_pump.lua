@@ -176,6 +176,7 @@ loading_pump_item.icons = loading_icon
 local loading_pump_recipe = table.deepcopy(data.raw["recipe"]["pump"])
 loading_pump_recipe.name = "ship-loading-pump"
 loading_pump_recipe.results[1].name = "ship-loading-pump"
+loading_pump_recipe.ingredients = data.raw.recipe.pump.ingredients -- Linked table so changes by AAI etc. are reflected in both
 
 local unloading_pump_item = table.deepcopy(data.raw["item"]["pump"])
 unloading_pump_item.name = "ship-unloading-pump"
@@ -186,7 +187,7 @@ unloading_pump_item.icons = unloading_icon
 local unloading_pump_recipe = table.deepcopy(data.raw["recipe"]["pump"])
 unloading_pump_recipe.name = "ship-unloading-pump"
 unloading_pump_recipe.results[1].name = "ship-unloading-pump"
-
+unloading_pump_recipe.ingredients = data.raw.recipe.pump.ingredients -- Linked table so changes by AAI etc. are reflected in both
 
 
 local function add_pipecover_layer(prototype, shifts)
