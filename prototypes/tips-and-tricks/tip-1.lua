@@ -31,9 +31,13 @@ function get_first_fuel()
   local burner_prototype = prototypes.entity["cargo_ship_engine"].burner_prototype
   if burner_prototype then
     for _, prototype in pairs(prototypes.item) do
-      local cat = next(burner_prototype.fuel_categories)
-      if prototype.fuel_category == cat then
-        return prototype
+      if prototype.fuel_categories then
+        local cat = next(burner_prototype.fuel_categories)
+        for _, found_cat in pairs(prototype.fuel_categories) do
+          if cat == found_cat then
+            return prototype
+          end
+        end
       end
     end
   end
@@ -180,7 +184,7 @@ local story_table =
       condition = function() return game.simulation.move_cursor({position = player.position}) end
     },
     {
-      condition = story_elapsed_check(3),
+      condition = story_elapsed_check(7.5),
       action = function()
         player.character.clear_items_inside()
 

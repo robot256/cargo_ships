@@ -174,7 +174,7 @@ local story_table =
       end
     },
     {
-      condition = story_elapsed_check(3),
+      condition = story_elapsed_check(5),
       action = function()
         player.character.clear_items_inside()
 

@@ -82,7 +82,7 @@ local story_table =
       end,
     },
     {
-      condition = story_elapsed_check(0.5),
+      condition = story_elapsed_check(0.25),
     },
     {
       condition = story_elapsed_check(0.25),
@@ -90,7 +90,6 @@ local story_table =
         game.simulation.control_press{control = "build", notify = true}
       end
     },
-
     {
       condition = function()
         return game.simulation.move_cursor({position = {-3, 0}})
@@ -99,7 +98,6 @@ local story_table =
     {
       condition = story_elapsed_check(0.25),
       action = function()
-        game.simulation.control_press{control = "build", notify = true}
         local engines = surface.find_entities_filtered{area = {{-15, -10}, {15, 10}}, name = "boat_engine"}
         if #engines == 0 then
           error("Boat engine not found")
@@ -115,6 +113,13 @@ local story_table =
         }
         local inventory = engine.get_fuel_inventory()
         inventory.insert{name="coal", count=50}
+      end
+    },
+
+    {
+      condition = story_elapsed_check(0.75),
+      action = function()
+        game.simulation.control_press{control = "build", notify = true}
       end
     },
     {
