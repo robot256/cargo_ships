@@ -1,8 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.4
+Date: 2026-11-07
+  Bugfixes:
+    - Hotfix for technology prerequisite error in 2.1.3: Deep sea oil extraction should only be a prerequisite for Oil processing when the "no oil for oil rigs" setting is enabled.
+  Changes:
+    - Increased Oil rig collection radius so that it can be placed off-center on the Offshore oil patch, to allow for collection of denser oil fields.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.3
 Date: 2026-11-07
   Changes:
-    - Increased Oil rig collection radius so that it can be placed off-center on the Offshore oil patch, to allow for collection of denser oil fields.
     - Added "Offshore oil" as a visible trigger on "Oil processing" technology.
     - Added "Deep sea oil extraction" as a prerequisite to "Oil processing". NOTE: You only need one, either "Oil gathering" OR "Deep seal oil extraction", to collect oil and unlock "Oil processing".
     - Removed prerequisite of "Tanker ship" from "Deep sea oil extraction". You can always take oil to land by pipeline.

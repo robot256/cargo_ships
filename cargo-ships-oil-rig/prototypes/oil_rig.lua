@@ -138,7 +138,7 @@ local oil_rig = {
   },
   energy_usage = "750kW",
   mining_speed = 1,
-  resource_searching_radius = 1.4,
+  resource_searching_radius = 2.4, -- enlarged from 1.4 to allow off-center patch collection
   vector_to_place_result = {0, 0},  -- Disables the output arrow for fluid miners
   module_slots = 3,
   radius_visualisation_picture =

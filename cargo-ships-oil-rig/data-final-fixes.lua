@@ -22,19 +22,6 @@ for name, tech in pairs(data.raw.technology) do
   end
 end
 
--- Add Deep Sea Oil Extraction as a prerequisite to Oil Processing
--- This is okay because Oil Processing is unlocked by trigger (mining oil from anywhere)
--- and won't actually require you to extract both offshore and onshore oil.    
-local oil_proc = data.raw.technology["oil-processing"]
-if oil_proc and oil_proc.prerequisites then
-  for _, tech in pairs(oil_proc.prerequisites) do
-    if tech == "oil-gathering" then
-      oil_proc.prerequisites[#oil_proc.prerequisites+1] = "deep_sea_oil_extraction"
-      break
-    end
-  end
-end
-
 -- Compatibility with Simple Seablock and others
 -- Changes Oil rig recipe if pumpjacks are unavailable
 if not data.raw.technology["oil-gathering"] or data.raw.technology["oil-gathering"].hidden or 
