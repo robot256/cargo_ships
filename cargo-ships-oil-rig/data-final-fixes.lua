@@ -3,9 +3,51 @@ local collision_mask_util = require("__core__/lualib/collision-mask-util")
 -- Ensure no collision with FISH when Space Exploration is installed
 data.raw["mining-drill"]["oil_rig"].collision_mask.layers.space_tile = nil
 
--- Make oil rig depend on Tanker research if present
-if data.raw.technology["tank_ship"] then
-  table.insert(data.raw.technology["deep_sea_oil_extraction"].prerequisites, "tank_ship")
+-- Update technology triggers
+for name, tech in pairs(data.raw.technology) do
+  -- Check if each technology has "mine crude-oil" as a trigger, and add "offshore-oil"
+  
+  if tech.research_trigger and tech.research_trigger.type == "mine-entity" then
+    if tech.research_trigger.entity and tech.research_trigger.entity == "crude-oil" then
+      tech.research_trigger.entity = nil
+      tech.research_trigger.entities = {"crude-oil", "offshore-oil"}
+    elseif tech.research_trigger.entities then
+      for _, ent in pairs(tech.research_trigger.entities) do
+        if ent == "crude-oil" then
+          tech.research_trigger.entities[#tech.research_trigger.entities+1] = "offshore-oil"
+          break
+        end
+      end
+    end
+  end
+end
+
+-- Add Deep Sea Oil Extraction as a prerequisite to Oil Processing
+-- This is okay because Oil Processing is unlocked by trigger (mining oil from anywhere)
+-- and won't actually require you to extract both offshore and onshore oil.    
+local oil_proc = data.raw.technology["oil-processing"]
+if oil_proc and oil_proc.prerequisites then
+  for _, tech in pairs(oil_proc.prerequisites) do
+    if tech == "oil-gathering" then
+      oil_proc.prerequisites[#oil_proc.prerequisites+1] = "deep_sea_oil_extraction"
+      break
+    end
+  end
+end
+
+-- Compatibility with Simple Seablock and others
+-- Changes Oil rig recipe if pumpjacks are unavailable
+if not data.raw.technology["oil-gathering"] or data.raw.technology["oil-gathering"].hidden or 
+   not data.raw.recipe.pumpjack or data.raw.recipe.pumpjack.hidden or
+   not data.raw.item.pumpjack or data.raw.item.pumpjack.hidden then
+  data.raw.recipe["oil_rig"].ingredients = {
+      {type="item", name="boiler", amount=1},
+      {type="item", name="steam-engine", amount=1},
+      {type="item", name="steel-plate", amount=175},
+      {type="item", name="electronic-circuit", amount=100},
+      {type="item", name="iron-gear-wheel", amount=50},
+      {type="item", name="pipe", amount=125}
+    }
 end
 
 -----------------------------
@@ -55,3 +97,4 @@ data.raw.resource["offshore-oil"].infinite = data.raw.resource["crude-oil"].infi
 data.raw.resource["offshore-oil"].minimum = data.raw.resource["crude-oil"].minimum
 data.raw.resource["offshore-oil"].normal = data.raw.resource["crude-oil"].normal
 data.raw.resource["offshore-oil"].map_color = data.raw.resource["crude-oil"].map_color
+
